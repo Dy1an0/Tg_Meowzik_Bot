@@ -1,9 +1,9 @@
 from os import environ
 
 # To use manual values, change these
-default_bot_token = "Your_Bot_Token_Here"
-default_sudo_chat_id =  -1234567777
-default_owner_id = 12345567
+default_bot_token = "1746107359:AAHh21LvFhmkPwiyNeT8Tpsz7c_51zI0ocQ"
+default_sudo_chat_id = -419748359
+default_owner_id = 1723431231
 
 # Don't change these value
 bot_token = environ.get("BOT_TOKEN", default_bot_token)
