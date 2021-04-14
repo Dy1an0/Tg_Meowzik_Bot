@@ -63,19 +63,19 @@ async def getadmins(chat_id):
 )
 async def help(_, message: Message):
     await message.reply_text(
-        """**Currently These Commands Are Supported.**
-/help To Show This Message.
-/skip To Skip Any Playing Music.
-/queue To See Queue List.
-/saavn "Song_Name" To Play A Song From Jiosaavn.
-/playlist "saavn_playlist_link" To add all songs to Queue and Play.
-/youtube "Song_Name" To Search For A Song And Play The Top-Most Song Or Play With A Link.
-/deezer "Song_Name" To Play A Song From Deezer.
-/telegram While Tagging a Song To Play From Telegram File.
+        """**Şu an bu komutlar destekleniyor.**
+/help Bu çıktıyı gösterir.
+/skip Sıradaki müziğe geçer.
+/queue Sıraya müzik ekler.
+/saavn "Song_Name" Müziği Jiosaavn üzerinden oynatır.
+/playlist "saavn_playlist_link" Tüm müzikleri sıraya ekler ve oynatır.
+/youtube "Song_Name" İSmini verdiğiniz müziği youtube üzerinden aratır ve en popüler sonucu oynatır.
+/deezer "Song_Name" Müziği Deezer üzerinden oynatır.
+/telegram Müziği telegram dosyası olarak gönderir.
 
-**Admin Commands**:
-/kill Yeah it kills the bot LOL
-/clearqueue It clears entire Queue in a snap"""
+**Admin komutları**:
+/kill eveet bu komut botu öldürür LOL
+/clearqueue Tüm sırayı temizler"""
     )
 
 #Repo  ------------------------------------------------------------------------------------
@@ -126,13 +126,13 @@ async def skip(_, message: Message):
     list_of_admins = await getadmins(message.chat.id)
     list_of_admins.append(queue[0][7])
     if message.from_user.id not in list_of_admins:
-        a= await app.send_message(sudo_chat_id,text=f"Skipping songs without admin permission is Sin! \n Want a Good Ban {message.from_user.mention}?",disable_notification=True)
+        a= await app.send_message(sudo_chat_id,text=f"Yönetici izni olmadan şarkıları atlamak yasaktır! \n İyi Bir ban gerekli {message.from_user.mention}?",disable_notification=True)
         await asyncio.sleep(5)
         await a.delete()
         await message.delete()
         return
     if len(queue)<=1:
-        m= await message.reply_text("Can't skip an empty queue!",disable_notification=True)
+        m= await message.reply_text("Boş bir sırayı atlayamazsınız!",disable_notification=True)
         await asyncio.sleep(5)
         await m.delete()
         await message.delete()
@@ -142,7 +142,7 @@ async def skip(_, message: Message):
         os.system(f"{kill} mpv")
     except:
         pass
-    m= await message.reply_text("Skipped!")
+    m= await message.reply_text("Müzik başarıyla atlandı!")
     await asyncio.sleep(5)
     await m.delete()
     await message.delete()
@@ -155,13 +155,13 @@ async def callback_query_skip(_, message: Message):
     list_of_admins.append(queue[0][7])
     if message.from_user.id not in list_of_admins:
         await app.answer_callback_query(message.id,
-                "Only admins or current users can skip!",
+                "Sadece admin ve eçili userler müziği geçe bilir!",
                 show_alert=True
                 )
         return
     elif len(queue)<=1:
         await app.answer_callback_query(message.id,
-                "Can't skip an empty queue!",
+                "Sırada atlamak için hiç müzik yok!",
                 show_alert=True
                 )
         return
@@ -170,7 +170,7 @@ async def callback_query_skip(_, message: Message):
         os.system(f"{kill} mpv")
     except:
         pass
-    m= await app.send_message(sudo_chat_id,text="Skipped!")
+    m= await app.send_message(sudo_chat_id,text="Atlandı!")
     await asyncio.sleep(5)
     await m.delete()
  
@@ -180,7 +180,7 @@ async def callback_query_skip(_, message: Message):
 async def q(_, message: Message):
     global queue
     if len(queue)<=1:
-        q= await message.reply_text("Queue is empty!",disable_notification=True)
+        q= await message.reply_text("Sıra boş!",disable_notification=True)
         await asyncio.sleep(5)
         await q.delete()
         await message.delete()
@@ -210,7 +210,7 @@ async def callback_query_queue(_, message):
     global queue
     if len(queue)<=1:
         await app.answer_callback_query(message.id,
-                "Queue is empty!",
+                "Sıra boş!",
                 show_alert=True
                 )
         return
@@ -221,14 +221,14 @@ async def callback_query_queue(_, message):
             out_file.write(liste)
         q= await app.send_document(sudo_chat_id,
             document=filename,
-            caption=f"Queue List \n Clicked by {message.from_user.mention}",
+            caption=f"Müzik \n açan kişi- {message.from_user.mention}",
             disable_notification=True,
         )
         os.remove(filename)
         await asyncio.sleep(10)
         await q.delete()
     else:
-        q= await app.send_message(sudo_chat_id,text= f"{liste} \nClicked by {message.from_user.mention}",disable_notification=True)
+        q= await app.send_message(sudo_chat_id,text= f"{liste} \nAçan kişi- {message.from_user.mention}",disable_notification=True)
         await asyncio.sleep(10)
         await q.delete()
     
@@ -248,7 +248,7 @@ async def q(_, message: Message):
         await message.delete()
         return
     queue=[]
-    q= await message.reply_text("Queue cleared successfully",disable_notification=True)
+    q= await message.reply_text("Sıra başarıyla temizlendi",disable_notification=True)
     await asyncio.sleep(3)
     await q.delete()
     await mm.delete()
@@ -276,7 +276,7 @@ async def deezer(_, message: Message):
         message.from_user = message.sender_chat
         message.from_user.first_name = message.sender_chat.username
     current_player = message.from_user.id
-    m = await message.reply_text(f"Searching for `{query}`on Deezer")
+    m = await message.reply_text(f"Deezer üzerinde aranıyor `{query}` ")
     try:
         resp= requests.get(f"http://35.240.133.234:8000/deezer?query={query}&count=1").text
         r = json.loads(resp)
@@ -326,10 +326,10 @@ async def yt(_, message: Message):
         views = results[0]["views"]
         module = "YouTube"
         if int(duration)>=1800: #duration limit
-                await m.edit("Bruh! Only songs within 30 Mins")
+                await m.edit("Bruh! Sadece 30 dakikadan kiçik şarkılar")
                 return    
     except Exception as e:
-        await m.edit("can't find anything!")
+        await m.edit("Sanırım bunu bulamadım!")
         await asyncio.sleep(3)
         await m.delete()
         await message.delete()
@@ -413,13 +413,13 @@ async def playlist(_,message: Message):
         list_of_admins.append(message.sender_chat.id)
     current_player = message.from_user.id
     if message.from_user.id not in list_of_admins:
-        a= await app.send_message(sudo_chat_id,text=f"Why don't you get an AdminTag? to use playlist {message.from_user.mention}...")
+        a= await app.send_message(sudo_chat_id,text=f"Neden bir AdminTag almıyorsunuz? oynatma listesini kullanmak için {message.from_user.mention}...")
         await asyncio.sleep(5)
         await a.delete()
         await message.delete()
         return
     query = kwairi(message)
-    m = await message.reply_text("Searching for Playlist and trying to get songs....")
+    m = await message.reply_text("Çalma Listesi aranıyor ve şarkılar bulunmaya çalışılıyor ...")
     try:
         resp= requests.get(f"http://35.240.133.234:8000/splaylist?query={query}").json()
         for i in resp:
@@ -434,12 +434,12 @@ async def playlist(_,message: Message):
                 queue.append(q)
             except:
                 continue
-        await m.edit(f"Added {len(resp)} songs from Playlist link")
+        await m.edit(f" {len(resp)} Müzik listesine eklendi")
         await asyncio.sleep(5)
         await m.delete()
     except Exception as e:
         print(e)
-        await m.edit("Use Jiosaavn playlist link only! or check logs for other errors")
+        await m.edit("Yalnızca Jiosaavn oynatma listesi bağlantısını kullanın! ve ya diğer hatalar için günlükleri kontrol edin")
         await asyncio.sleep(5)
         await m.delete()
         await message.delete()
@@ -468,17 +468,17 @@ async def telegram(_, message: Message):
         message.from_user = message.sender_chat
         message.from_user.first_name = message.sender_chat.username
     elif not message.reply_to_message.media:
-        await message.reply_text("Reply To A Telegram Audio To Play It.")
+        await message.reply_text("Bir Telegram Sesini Çalmak İçin Yanıtla.")
         return
     elif message.reply_to_message.audio:
         if int(message.reply_to_message.audio.file_size) >= 104857600:
-            await message.reply_text('Bruh! Only songs within 100 MB')
+            await message.reply_text('Bruh! Sadece 100MB kadar müzikler oynatıla bilir')
             return
         else:
             slink= message.reply_to_message.audio.file_id
     elif message.reply_to_message.document:
         if int(message.reply_to_message.document.file_size) >= 104857600:
-            await message.reply_text('Bruh! Only songs within 100 MB')
+            await message.reply_text('Bruh! Sadece 100MB kadar müzikler oynatıla bilir')
             return
         else:
             slink= message.reply_to_message.document.file_id
@@ -508,9 +508,9 @@ async def quit(_, message: Message):
     if message.sender_chat:
         message.from_user = message.sender_chat
         message.from_user.first_name = message.sender_chat.username
-    await message.reply_text("aww snap >-< , GoodByeCruelWorld")
+    await message.reply_text("aww snap >-< , Hoşçakal zalim dünya")
     queue=[]
-    print("Exiting...........")
+    print("Terk ediyorummm...........")
     os.system(f"{kill} mpv")
     exit()
 
